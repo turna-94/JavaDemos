@@ -1,9 +1,7 @@
 package com.example.banking.domain;
 
 public enum AccountStatus {
-	
 	ACTIVE(100,1), CLOSED(200,2), BLOCKED(300,3);
-	
 	private int code;
 	private int code2;
 
@@ -17,7 +15,9 @@ public enum AccountStatus {
 	}
 
 
+
 	public int getCode() {
 		return code;
 	}
+	
 }

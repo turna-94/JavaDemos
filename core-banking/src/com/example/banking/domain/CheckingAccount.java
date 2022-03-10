@@ -1,32 +1,31 @@
 package com.example.banking.domain;
 
-public class CheckingAccount extends Account{
-	
-	private double overdraftAmount;
+public class CheckingAccount extends Account {
+	private Money overdraftAmount;
 
-	public CheckingAccount(String iban, double balance,double overdraftAmount) {
+	public CheckingAccount(String iban, Money balance, Money overdraftAmount) {
 		super(iban, balance);
-		this.overdraftAmount=overdraftAmount;
+		this.overdraftAmount = overdraftAmount;
 	}
 
-	public double getOverdraftAmount() {
+	public Money getOverdraftAmount() {
 		return overdraftAmount;
 	}
 
-	public void setOverdraftAmount(double overdraftAmount) {
+	public void setOverdraftAmount(Money overdraftAmount) {
 		this.overdraftAmount = overdraftAmount;
 	}
-	
-	public boolean withDraw(double amount) {
-		if(amount<=0.0) {
-			System.out.println("Amount must be positive");
-			return false;
-		}
-		if(amount>balance+overdraftAmount) {
-			System.out.println("Your balance does not cover your expenses "+(amount-balance-overdraftAmount));
-			return false;
-		}
-		this.balance=balance-amount;
-		return true;
+
+	@Override
+	public Money withdraw(Money amount) throws InsufficientBalanceException {
+		System.out.println("CheckingAccount::withdraw");
+		if (amount.isLessThanOrEqualTo(0.0))
+			throw new IllegalArgumentException("amount must be positive.");
+		if (amount.isGreaterThan(balance.plus(overdraftAmount)))
+			throw new InsufficientBalanceException("Your balance does not cover your expenses.",
+					amount.minus(balance).minus(overdraftAmount));
+		balance = balance.minus(amount);
+		return balance;
 	}
+
 }

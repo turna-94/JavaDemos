@@ -1,12 +1,11 @@
 package com.example.banking.domain;
 
-public class SavingsAccount extends Account{
-	
+public class SavingsAccount extends Account {
 	private double interestRate;
 
-	public SavingsAccount(String iban, double balance,double interestRate) {
-		super(iban, balance=balance+(interestRate*balance));
-		this.interestRate=interestRate;
+	public SavingsAccount(String iban, Money balance, double interestRate) {
+		super(iban, Money.valueOf((1.0 + 0.01 * interestRate) * balance.getDoubleValue(),balance.getCurrency()));
+		this.interestRate = interestRate;
 	}
 
 	public double getInterestRate() {
@@ -19,8 +18,9 @@ public class SavingsAccount extends Account{
 
 	@Override
 	public String toString() {
-		return "SavingsAccount [interestRate=" + interestRate + ", balance=" + balance + "]";
+		return "SavingsAccount [interestRate=" + interestRate + ", balance=" + balance + ", iban=" + getIban()
+				+ "]";
 	}
 	
-	
+
 }
